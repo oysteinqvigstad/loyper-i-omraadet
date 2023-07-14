@@ -24,7 +24,6 @@ func getNearByTrails(db *dto.TrailsDB) http.Handler {
 			return
 		}
 
-		//quality, _ := getQueryStr(r.URL, "quality", "q")
 		limitResultsInterval, _ := getQueryIntInterval(r.URL, "limit", "l")
 		radius, err := getQueryFloat(r.URL, "radius", "r")
 		if err != nil {
@@ -34,26 +33,30 @@ func getNearByTrails(db *dto.TrailsDB) http.Handler {
 		results := db.GetNearbyTrails(typeOfTrail, coords, radius)
 		results = limitResults(results, limitResultsInterval)
 
-		// replace
-		httpRespondJSON(w, results)
+		if len(results) > 0 {
+			httpRespondJSON(w, results)
+		} else {
+			http.Error(w, "no results", http.StatusNoContent)
+		}
 
 	})
 }
 
 func limitResults(trails dto.TrailsJSON, interval [2]int) dto.TrailsJSON {
-	start, end := interval[0], interval[1]
+	start, end := interval[0]-1, interval[1]
 	length := len(trails)
-	if start < 1 {
-		start = 1
-	} else if start-1 > length {
-		start = length
+
+	if start < 0 {
+		start = 0
+	} else if start >= length {
+		return dto.TrailsJSON{}
 	}
-	if end < start {
+	if end < start+1 {
 		end = start
 	} else if end > length {
 		end = length
 	}
-	return trails[start-1 : end]
+	return trails[start:end]
 }
 
 func httpRespondJSON(w http.ResponseWriter, data any) {
