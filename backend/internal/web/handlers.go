@@ -33,12 +33,7 @@ func getNearByTrails(db *dto.TrailsDB) http.Handler {
 		results := db.GetNearbyTrails(typeOfTrail, coords, radius)
 		results = limitResults(results, limitResultsInterval)
 
-		if len(results) > 0 {
-			httpRespondJSON(w, results)
-		} else {
-			http.Error(w, "no results", http.StatusNoContent)
-		}
-
+		httpRespondJSON(w, results)
 	})
 }
 
