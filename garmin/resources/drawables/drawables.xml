@@ -1,0 +1,7 @@
+<drawables>
+    <bitmap id="LauncherIcon" filename="icons/launcher_icon.png" />
+    <bitmap id="HikingIcon" filename="icons/hiking.png" />
+    <bitmap id="SkiingIcon" filename="icons/skiing.png" />
+    <bitmap id="BikingIcon" filename="icons/biking.png" />
+    <bitmap id="OtherIcon" filename="icons/other.png" />
+</drawables>
